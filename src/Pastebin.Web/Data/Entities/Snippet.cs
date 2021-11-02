@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 
 namespace Pastebin.Web.Data.Entities
