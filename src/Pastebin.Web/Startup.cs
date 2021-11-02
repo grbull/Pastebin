@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pastebin.Web.Data;
+using Pastebin.Web.Data.Repositories;
+using Pastebin.Web.Services;
 
 namespace Pastebin.Web
 {
@@ -24,6 +27,13 @@ namespace Pastebin.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // Data access layer
+            services.AddDbContext<PastebinContext>();
+            services.AddScoped<ISnippetRepository, SnippetRepository>();
+            
+            // Service layer
+            services.AddScoped<ISnippetService, SnippetService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,9 +11,9 @@ namespace Pastebin.Web.Services
 {
     public class SnippetService : ISnippetService
     {
-        private readonly SnippetRepository _snippetRepository;
+        private readonly ISnippetRepository _snippetRepository;
 
-        public SnippetService(SnippetRepository snippetRepository)
+        public SnippetService(ISnippetRepository snippetRepository)
         {
             _snippetRepository = snippetRepository;
         }
