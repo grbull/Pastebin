@@ -6,3 +6,6 @@ riderModule.iml
 
 # IDE settings
 .idea/
+
+# Sqlite Database
+Pastebin.db
