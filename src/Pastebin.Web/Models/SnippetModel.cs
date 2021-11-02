@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Pastebin.Web.Models
 {
@@ -7,8 +8,10 @@ namespace Pastebin.Web.Models
     {
         public Guid Id { get; set; }
 
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "Untitled")]
         public string? Title { get; set; }
-
+        
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "None")]
         public string? Language { get; set; }
 
         public bool IsPrivate { get; set; }
@@ -17,6 +20,7 @@ namespace Pastebin.Web.Models
 
         public DateTime DateCreated { get; set; }
 
+        [DisplayFormat(NullDisplayText = "Never")]
         public DateTime? DateExpires { get; set; }
     }
 }
