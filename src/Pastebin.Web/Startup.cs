@@ -31,10 +31,10 @@ namespace Pastebin.Web
             // Data access layer
             services.AddDbContext<PastebinContext>();
             services.AddScoped<ISnippetRepository, SnippetRepository>();
-            
+
             // Service layer
             services.AddScoped<ISnippetService, SnippetService>();
-            
+
             // Lower case routing
             services.AddRouting(options => options.LowercaseUrls = true);
         }
@@ -65,6 +65,12 @@ namespace Pastebin.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Snippet}/{action=Create}/{id?}");
+
+                endpoints.MapFallback(context =>
+                {
+                    context.Response.Redirect("/snippet/error404");
+                    return Task.CompletedTask;
+                });
             });
         }
     }

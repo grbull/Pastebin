@@ -45,10 +45,15 @@ namespace Pastebin.Web.Controllers
 
             if (snippetModel is null)
             {
-                return NotFound();
+                return View("Error404");
             }
 
             return View(snippetModel);
+        }
+
+        public IActionResult Error404()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
