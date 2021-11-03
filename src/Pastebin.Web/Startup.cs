@@ -56,6 +56,8 @@ namespace Pastebin.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseStatusCodePagesWithReExecute("/snippet/error/{0}");
+            
             app.UseRouting();
 
             app.UseAuthorization();
@@ -65,12 +67,6 @@ namespace Pastebin.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Snippet}/{action=Create}/{id?}");
-
-                endpoints.MapFallback(context =>
-                {
-                    context.Response.Redirect("/snippet/error404");
-                    return Task.CompletedTask;
-                });
             });
         }
     }

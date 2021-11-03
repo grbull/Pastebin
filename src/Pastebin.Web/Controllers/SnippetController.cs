@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Logging;
 using Pastebin.Web.Models;
 using Pastebin.Web.Services;
@@ -45,20 +50,17 @@ namespace Pastebin.Web.Controllers
 
             if (snippetModel is null)
             {
-                return View("Error404");
+                return NotFound();
             }
 
             return View(snippetModel);
         }
 
-        public IActionResult Error404()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(string id)
         {
+            // TODO: Show status code and specific error information
+            // TODO: Tidy up ErrorView
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
