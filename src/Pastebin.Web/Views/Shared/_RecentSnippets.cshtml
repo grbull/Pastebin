@@ -1,0 +1,32 @@
+@using Pastebin.Web.Services
+@using Humanizer
+@using ColorCode
+@inject ISnippetService _snippetService
+
+@{
+    var snippets = await _snippetService.GetRecentSnippets(10);
+}
+
+<h2>Recent Snippets</h2>
+<div class="list-group">
+    @foreach (var snippet in snippets)
+    {
+        <a class="list-group-item list-group-item-action" asp-controller="Snippet" asp-action="View" asp-route-id="@snippet.Id">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">
+                    @Html.DisplayFor(m => snippet.Title)
+                    @if (snippet.Language != null)
+                    {
+                        <span class="badge badge-dark">@Languages.FindById(snippet.Language).Name</span>
+                    }
+                </h6>
+                <small>@snippet.DateCreated.Humanize()</small>
+            </div>
+            @if (snippet.DateExpires.HasValue)
+            {
+                <small>Expires in @snippet.DateExpires.Humanize().</small>
+            }
+
+        </a>
+    }
+</div>

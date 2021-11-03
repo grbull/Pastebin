@@ -27,9 +27,19 @@
     </nav>
 </header>
 <div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
+    <div class="row">
+        <div class="col-lg-9">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+        <div class="col">
+            <aside>
+                @{ await Html.RenderPartialAsync("_RecentSnippets"); }
+            </aside>
+        </div>
+    </div>
+
 </div>
 
 <footer class="border-top footer text-muted">
