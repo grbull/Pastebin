@@ -8,9 +8,14 @@ namespace Pastebin.Web.Data
     {
         public DbSet<Snippet> Snippets { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        public PastebinContext(DbContextOptions<PastebinContext> options) : base(options)
         {
-            options.UseSqlite($"Data Source=Pastebin.db");
+            
         }
+
+        // protected override void OnConfiguring(DbContextOptionsBuilder options)
+        // {
+        //     options.UseSqlite("Data Source=Pastebin.db");
+        // }
     }
 }
