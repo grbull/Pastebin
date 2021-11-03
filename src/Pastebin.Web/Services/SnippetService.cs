@@ -60,6 +60,11 @@ namespace Pastebin.Web.Services
             {
                 return null;
             }
+            
+            if (snippetEntity.DateExpires.HasValue && DateTime.UtcNow > snippetEntity.DateExpires)
+            {
+                return null;
+            }
 
             return new SnippetModel
             {

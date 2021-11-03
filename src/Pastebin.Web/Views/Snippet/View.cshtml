@@ -1,0 +1,54 @@
+@using ColorCode
+@model SnippetModel
+@{
+    ViewData["Title"] = Html.DisplayFor(m => m.Title);
+}
+
+<h3>
+    @Html.DisplayFor(m => m.Title) 
+    @{
+        if (Model.IsPrivate)
+        {
+            <span class="text-muted">(Private)</span>
+        }
+        if (Model.Language != null)
+        {
+            <span> - </span>
+            <span class="badge badge-secondary">@Html.DisplayFor(m => m.Language)</span> 
+        }
+    }
+
+</h3>
+
+<table class="table">
+    <tbody>
+    <tr>
+        <td>@Html.DisplayNameFor(m => m.DateCreated):</td>
+        <td>@Html.DisplayFor(m => m.DateCreated)</td>
+    </tr>
+    <tr>
+        <td>@Html.DisplayNameFor(m => m.DateExpires):</td>
+        <td>@Html.DisplayFor(m => m.DateExpires)</td>
+    </tr>
+    </tbody>
+</table>
+
+@{
+    if (Model.Language != null)
+    {
+        var formatter = new HtmlFormatter();
+        var language = Languages.All.First(language => language.Name == Model.Language);
+        var html = formatter.GetHtmlString(Model.Content, language);
+
+        <div class="snippet-content">@Html.Raw(html)</div>
+    }
+    else
+    {
+        <div class="snippet-content">
+            <pre>@Model.Content</pre>
+        </div>
+    }
+
+}
+
+@Html.TextAreaFor(m => m.Content, new {@class = "form-control", rows = 15})

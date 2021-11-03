@@ -34,6 +34,9 @@ namespace Pastebin.Web
             
             // Service layer
             services.AddScoped<ISnippetService, SnippetService>();
+            
+            // Lower case routing
+            services.AddRouting(options => options.LowercaseUrls = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +48,7 @@ namespace Pastebin.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/snippet/error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -61,7 +64,7 @@ namespace Pastebin.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Snippet}/{action=Create}/{id?}");
             });
         }
     }

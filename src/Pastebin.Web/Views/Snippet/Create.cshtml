@@ -1,0 +1,62 @@
+﻿@using ColorCode
+@model SnippetCreateModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Create a snippet</h2>
+
+@using (Html.BeginForm("Create", "Snippet", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title):
+        @Html.TextBoxFor(m => m.Title, new {@class = "form-control"})
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col">
+            @Html.LabelFor(m => m.Language):
+            @Html.DropDownListFor(m => m.Language, Languages.All
+                .OrderBy(language => language.Name)
+                .Select(language => new SelectListItem {Text = language.Name, Value = language.Name})
+                .ToList(), "None", new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Language, "", htmlAttributes: new {@class = "text-danger"})
+        </div>
+        <div class="form-group col">
+            @Html.LabelFor(m => m.ExpiresInMin):
+            @Html.DropDownListFor(m => m.ExpiresInMin, new List<SelectListItem>
+            {
+                new SelectListItem {Text = "5 minutes", Value = "5"},
+                new SelectListItem {Text = "15 minutes", Value = "15"},
+                new SelectListItem {Text = "30 minutes", Value = "30"},
+                new SelectListItem {Text = "1 hour", Value = "60"},
+                new SelectListItem {Text = "3 hour", Value = "180"},
+                new SelectListItem {Text = "6 hour", Value = "360"},
+                new SelectListItem {Text = "12 hour", Value = "720"},
+                new SelectListItem {Text = "24 hour", Value = "1440"},
+            }, "Never", new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.ExpiresInMin, "", htmlAttributes: new {@class = "text-danger"})
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-check">
+            @Html.CheckBoxFor(m => m.IsPrivate, new {@class = "form-check-input"})
+            @Html.LabelFor(m => m.IsPrivate, new {@class = "form-check-label"})
+            @Html.ValidationMessageFor(m => m.IsPrivate, "", htmlAttributes: new {@class = "text-danger"})
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Content) (Required):
+        @Html.TextAreaFor(m => m.Content, new {@class = "form-control", rows = 15})
+        @Html.ValidationMessageFor(m => m.Content, "", new {@class = "text-danger"})
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+}
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
