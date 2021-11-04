@@ -7,8 +7,8 @@ namespace Pastebin.Web.Services
 {
     public interface ISnippetService
     {
-        Task<SnippetModel> CreateSnippetAsync(SnippetCreateModel snippetCreateModel);
-        Task<SnippetModel> GetSnippetById(Guid snippetId);
-        Task<List<SnippetModel>> GetRecentSnippets(int count);
+        Task<SnippetModel> CreateAsync(SnippetCreateModel snippetCreateModel);
+        Task<SnippetModel> GetByIdAsync(Guid snippetId);
+        Task<List<SnippetModel>> GetRecentAsync(int count);
     }
 }

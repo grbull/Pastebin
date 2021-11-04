@@ -4,7 +4,7 @@
 @inject ISnippetService _snippetService
 
 @{
-    var snippets = await _snippetService.GetRecentSnippets(10);
+    var snippets = await _snippetService.GetRecentAsync(10);
 }
 
 <h2>Recent Snippets</h2>

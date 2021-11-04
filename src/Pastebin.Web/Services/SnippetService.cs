@@ -18,7 +18,7 @@ namespace Pastebin.Web.Services
             _snippetRepository = snippetRepository;
         }
 
-        public async Task<SnippetModel> CreateSnippetAsync(SnippetCreateModel snippetCreateModel)
+        public async Task<SnippetModel> CreateAsync(SnippetCreateModel snippetCreateModel)
         {
             if (snippetCreateModel is null)
             {
@@ -52,7 +52,7 @@ namespace Pastebin.Web.Services
             };
         }
 
-        public async Task<SnippetModel> GetSnippetById(Guid snippetId)
+        public async Task<SnippetModel> GetByIdAsync(Guid snippetId)
         {
             var snippetEntity = await _snippetRepository.FindAsync(snippetId);
 
@@ -78,7 +78,7 @@ namespace Pastebin.Web.Services
             };
         }
 
-        public async Task<List<SnippetModel>> GetRecentSnippets(int count)
+        public async Task<List<SnippetModel>> GetRecentAsync(int count)
         {
             var query = _snippetRepository.Get()
                 .Where(s => s.IsPrivate == false)

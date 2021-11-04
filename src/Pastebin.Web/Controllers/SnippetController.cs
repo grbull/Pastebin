@@ -39,14 +39,14 @@ namespace Pastebin.Web.Controllers
                 return View();
             }
 
-            var snippetModel = await _snippetService.CreateSnippetAsync(snippetCreateModel);
+            var snippetModel = await _snippetService.CreateAsync(snippetCreateModel);
 
             return RedirectToAction("View", "Snippet", new {id = snippetModel.Id});
         }
 
         public async Task<IActionResult> View(Guid id)
         {
-            var snippetModel = await _snippetService.GetSnippetById(id);
+            var snippetModel = await _snippetService.GetByIdAsync(id);
 
             if (snippetModel is null)
             {
