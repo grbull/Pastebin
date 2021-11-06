@@ -19,9 +19,10 @@ namespace Pastebin.Tests.Data.Repositories
         }
 
         [Fact]
-        public async Task AddAsync_Can_Add_Snippet()
+        public async Task AddAsync_ShouldAddSnippet_WhenSnippetIsValid()
         {
             // Arrange
+            var testDateCreated = DateTime.UtcNow;
             var testSnippet = new Snippet
             {
                 Id = Guid.NewGuid(),
@@ -29,10 +30,10 @@ namespace Pastebin.Tests.Data.Repositories
                 Language = "c#",
                 IsPrivate = false,
                 Content = "Test Content",
-                DateCreated = DateTime.UtcNow,
-                DateExpires = DateTime.UtcNow.AddMinutes(60),
+                DateCreated = testDateCreated,
+                DateExpires = testDateCreated.AddMinutes(60),
             };
-
+            
             // Act
             using (var context = new PastebinContext(_contextOptions))
             {
@@ -56,7 +57,7 @@ namespace Pastebin.Tests.Data.Repositories
         }
 
         [Fact]
-        public async Task FindAsync_Can_Find_Snippet()
+        public async Task FindAsync_ShouldReturnSnippet_WhenSnippetExists()
         {
             // Arrange
             var testSnippet = new Snippet
@@ -94,7 +95,23 @@ namespace Pastebin.Tests.Data.Repositories
         }
 
         [Fact]
-        public async Task Get_Returns_Valid_IQueryable()
+        public async Task FindAsync_ShouldReturnNull_WhenSnippetDoesNotExist()
+        {
+            // Arrange & Act
+            var testId = Guid.NewGuid();
+
+            // Assert
+            using (var context = new PastebinContext(_contextOptions))
+            {
+                var repository = new SnippetRepository(context);
+                var snippet = await repository.FindAsync(testId);
+
+                Assert.Null(snippet);
+            }
+        }
+
+        [Fact]
+        public async Task Get_ShouldReturnValidIQueryable()
         {
             // Arrange
             var testSnippet = new Snippet
