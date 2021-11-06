@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Pastebin.Web.Data;
 using Pastebin.Web.Data.Entities;
 using Pastebin.Web.Data.Repositories;
@@ -33,7 +36,7 @@ namespace Pastebin.Tests.Data.Repositories
                 DateCreated = testDateCreated,
                 DateExpires = testDateCreated.AddMinutes(60),
             };
-            
+
             // Act
             using (var context = new PastebinContext(_contextOptions))
             {
@@ -46,13 +49,7 @@ namespace Pastebin.Tests.Data.Repositories
             {
                 var snippet = await context.Snippets.FindAsync(testSnippet.Id);
 
-                Assert.Equal(testSnippet.Id, snippet.Id);
-                Assert.Equal(testSnippet.Title, snippet.Title);
-                Assert.Equal(testSnippet.Language, snippet.Language);
-                Assert.Equal(testSnippet.IsPrivate, snippet.IsPrivate);
-                Assert.Equal(testSnippet.Content, snippet.Content);
-                Assert.Equal(testSnippet.DateCreated, snippet.DateCreated);
-                Assert.Equal(testSnippet.DateExpires, snippet.DateExpires);
+                snippet.Should().BeEquivalentTo(testSnippet);
             }
         }
 
@@ -60,6 +57,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task FindAsync_ShouldReturnSnippet_WhenSnippetExists()
         {
             // Arrange
+            var testDateCreated = DateTime.UtcNow;
             var testSnippet = new Snippet
             {
                 Id = Guid.NewGuid(),
@@ -67,8 +65,8 @@ namespace Pastebin.Tests.Data.Repositories
                 Language = "c#",
                 IsPrivate = false,
                 Content = "Test Content",
-                DateCreated = DateTime.UtcNow,
-                DateExpires = DateTime.UtcNow.AddMinutes(60),
+                DateCreated = testDateCreated,
+                DateExpires = testDateCreated.AddMinutes(60),
             };
 
             // Act
@@ -84,15 +82,10 @@ namespace Pastebin.Tests.Data.Repositories
                 var repository = new SnippetRepository(context);
                 var snippet = await repository.FindAsync(testSnippet.Id);
 
-                Assert.Equal(testSnippet.Id, snippet.Id);
-                Assert.Equal(testSnippet.Title, snippet.Title);
-                Assert.Equal(testSnippet.Language, snippet.Language);
-                Assert.Equal(testSnippet.IsPrivate, snippet.IsPrivate);
-                Assert.Equal(testSnippet.Content, snippet.Content);
-                Assert.Equal(testSnippet.DateCreated, snippet.DateCreated);
-                Assert.Equal(testSnippet.DateExpires, snippet.DateExpires);
+                snippet.Should().BeEquivalentTo(testSnippet);
             }
         }
+
 
         [Fact]
         public async Task FindAsync_ShouldReturnNull_WhenSnippetDoesNotExist()
@@ -106,14 +99,15 @@ namespace Pastebin.Tests.Data.Repositories
                 var repository = new SnippetRepository(context);
                 var snippet = await repository.FindAsync(testId);
 
-                Assert.Null(snippet);
+                snippet.Should().BeNull();
             }
         }
 
         [Fact]
-        public async Task Get_ShouldReturnValidIQueryable()
+        public async Task Get_ShouldReturnSnippets_WhenQueried()
         {
             // Arrange
+            var testDateCreated = DateTime.UtcNow;
             var testSnippet = new Snippet
             {
                 Id = Guid.NewGuid(),
@@ -121,8 +115,8 @@ namespace Pastebin.Tests.Data.Repositories
                 Language = "c#",
                 IsPrivate = false,
                 Content = "Test Content",
-                DateCreated = DateTime.UtcNow,
-                DateExpires = DateTime.UtcNow.AddMinutes(60),
+                DateCreated = testDateCreated,
+                DateExpires = testDateCreated.AddMinutes(60),
             };
 
             // Act
@@ -138,14 +132,7 @@ namespace Pastebin.Tests.Data.Repositories
                 var repository = new SnippetRepository(context);
                 var snippets = await repository.Get().Where(snippet => snippet.Id == testSnippet.Id).ToListAsync();
 
-                Assert.Single(snippets);
-                Assert.Equal(testSnippet.Id, snippets[0].Id);
-                Assert.Equal(testSnippet.Title, snippets[0].Title);
-                Assert.Equal(testSnippet.Language, snippets[0].Language);
-                Assert.Equal(testSnippet.IsPrivate, snippets[0].IsPrivate);
-                Assert.Equal(testSnippet.Content, snippets[0].Content);
-                Assert.Equal(testSnippet.DateCreated, snippets[0].DateCreated);
-                Assert.Equal(testSnippet.DateExpires, snippets[0].DateExpires);
+                snippets.Should().ContainSingle().Which.Should().BeEquivalentTo(testSnippet);
             }
         }
     }
