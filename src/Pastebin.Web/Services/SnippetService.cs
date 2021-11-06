@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace Pastebin.Web.Services
                 throw new ArgumentNullException(nameof(snippetCreateModel));
             }
 
+            var dateCreated = DateTime.UtcNow;
             var snippetEntity = new Snippet
             {
                 Id = Guid.NewGuid(),
@@ -32,9 +34,9 @@ namespace Pastebin.Web.Services
                 Language = snippetCreateModel.Language,
                 IsPrivate = snippetCreateModel.IsPrivate,
                 Content = snippetCreateModel.Content,
-                DateCreated = DateTime.UtcNow,
+                DateCreated = dateCreated,
                 DateExpires = snippetCreateModel.ExpiresInMin.HasValue
-                    ? DateTime.UtcNow.AddMinutes((int) snippetCreateModel.ExpiresInMin)
+                    ? dateCreated.AddMinutes((int) snippetCreateModel.ExpiresInMin)
                     : null
             };
 
@@ -60,7 +62,7 @@ namespace Pastebin.Web.Services
             {
                 return null;
             }
-            
+
             if (snippetEntity.DateExpires.HasValue && DateTime.UtcNow > snippetEntity.DateExpires)
             {
                 return null;
