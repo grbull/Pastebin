@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Pastebin.Web.Data;
 using Pastebin.Web.Data.Entities;
 using Pastebin.Web.Data.Repositories;
