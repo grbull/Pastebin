@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Pastebin.Web.Data.Entities;
 
 namespace Pastebin.Web.Data.Repositories
@@ -28,9 +29,22 @@ namespace Pastebin.Web.Data.Repositories
             return await _pastebinContext.Snippets.FindAsync(id);
         }
 
+        [Obsolete("This function has been replaced by GetRecentAsync and is marked for deletion.")]
         public IQueryable<Snippet> Get()
         {
             return _pastebinContext.Snippets.AsQueryable();
+        }
+        
+        public async Task<List<Snippet>> GetRecentAsync(int count)
+        {
+            var recentSnippets = await _pastebinContext.Snippets.AsQueryable()
+                .Where(s => s.IsPrivate == false)
+                .Where(s => s.DateExpires == null || s.DateExpires > DateTime.UtcNow)
+                .OrderByDescending(s => s.DateCreated)
+                .Take(count)
+                .ToListAsync();
+
+            return recentSnippets;
         }
     }
 }

@@ -82,13 +82,9 @@ namespace Pastebin.Web.Services
 
         public async Task<List<SnippetModel>> GetRecentAsync(int count)
         {
-            var query = _snippetRepository.Get()
-                .Where(s => s.IsPrivate == false)
-                .Where(s => s.DateExpires == null || s.DateExpires > DateTime.UtcNow)
-                .OrderByDescending(s => s.DateCreated)
-                .Take(count);
+            var snippets = await _snippetRepository.GetRecentAsync(count);
 
-            return await query.Select(snippet => new SnippetModel
+            return snippets.Select(snippet => new SnippetModel
             {
                 Id = snippet.Id,
                 Title = snippet.Title,
@@ -97,7 +93,7 @@ namespace Pastebin.Web.Services
                 Content = snippet.Content,
                 DateCreated = snippet.DateCreated,
                 DateExpires = snippet.DateExpires
-            }).ToListAsync();
+            }).ToList();
         }
     }
 }
