@@ -274,31 +274,37 @@ namespace Pastebin.Tests.Services
         [Fact]
         public async Task GetRecentAsync_ShouldCallSnippetRepositoryGetOnce()
         {
-            throw new NotImplementedException();
-        }
+            // Arrange
+            var testCount = 10;
+            var testSnippets = new List<Snippet>();
+            _snippetRepository.Setup(repo => repo.GetRecentAsync(testCount))
+                .ReturnsAsync(testSnippets);
 
-        [Fact]
-        public async Task GetRecentAsync_ShouldNotReturnSnippet_WhenIsPrivate()
-        {
-            throw new NotImplementedException();
-        }
+            // Act
+            await _snippetService.GetRecentAsync(testCount);
 
-        [Fact]
-        public async Task GetRecentAsync_ShouldNotReturnSnippet_WhenIsExpired()
-        {
-            throw new NotImplementedException();
+            // Assert
+            _snippetRepository.Verify(repo => repo.GetRecentAsync(testCount), Times.Once);
         }
 
         [Fact]
         public async Task GetRecentAsync_ShouldReturnListOfSnippetModels()
         {
-            throw new NotImplementedException();
-        }
+            // Arrange
+            var testCount = 10;
+            var testSnippets = new List<Snippet>
+            {
+                new() {Id = Guid.NewGuid(), Content = "Test content", IsPrivate = false, DateCreated = DateTime.UtcNow}
+            };
+            _snippetRepository.Setup(repo => repo.GetRecentAsync(testCount))
+                .ReturnsAsync(testSnippets);
 
-        [Fact]
-        public async Task GetRecentAsync_ShouldBeOrderedByDescendingDate()
-        {
-            throw new NotImplementedException();
+            // Act
+            var snippetModels = await _snippetService.GetRecentAsync(testCount);
+
+            // Assert
+            snippetModels.Should().BeOfType<List<SnippetModel>>().And.ContainSingle().Which.Id.Should()
+                .Be(testSnippets[0].Id);
         }
     }
 }
