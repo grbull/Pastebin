@@ -29,12 +29,6 @@ namespace Pastebin.Web.Data.Repositories
             return await _pastebinContext.Snippets.FindAsync(id);
         }
 
-        [Obsolete("This function has been replaced by GetRecentAsync and is marked for deletion.")]
-        public IQueryable<Snippet> Get()
-        {
-            return _pastebinContext.Snippets.AsQueryable();
-        }
-        
         public async Task<List<Snippet>> GetRecentAsync(int count)
         {
             var recentSnippets = await _pastebinContext.Snippets.AsQueryable()

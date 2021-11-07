@@ -10,7 +10,6 @@ namespace Pastebin.Web.Data.Repositories
     {
         Task<Snippet> AddAsync(Snippet snippet);
         Task<Snippet> FindAsync(Guid id);
-        IQueryable<Snippet> Get();
         Task<List<Snippet>> GetRecentAsync(int count);
     }
 }

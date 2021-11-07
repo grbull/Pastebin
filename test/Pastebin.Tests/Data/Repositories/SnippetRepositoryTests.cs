@@ -100,38 +100,5 @@ namespace Pastebin.Tests.Data.Repositories
                 snippet.Should().BeNull();
             }
         }
-
-        [Fact]
-        public async Task Get_ShouldReturnSnippets_WhenQueried()
-        {
-            // Arrange
-            var testDateCreated = DateTime.UtcNow;
-            var testSnippet = new Snippet
-            {
-                Id = Guid.NewGuid(),
-                Title = "Test Snippet",
-                Language = "c#",
-                IsPrivate = false,
-                Content = "Test Content",
-                DateCreated = testDateCreated,
-                DateExpires = testDateCreated.AddMinutes(60),
-            };
-
-            // Act
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.AddAsync(testSnippet);
-                await context.SaveChangesAsync();
-            }
-
-            // Assert
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                var repository = new SnippetRepository(context);
-                var snippets = await repository.Get().Where(snippet => snippet.Id == testSnippet.Id).ToListAsync();
-
-                snippets.Should().ContainSingle().Which.Should().BeEquivalentTo(testSnippet);
-            }
-        }
     }
 }

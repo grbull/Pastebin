@@ -274,18 +274,7 @@ namespace Pastebin.Tests.Services
         [Fact]
         public async Task GetRecentAsync_ShouldCallSnippetRepositoryGetOnce()
         {
-            // Arrange
-            var snippets = new List<Snippet> { };
-
-            _snippetRepository.Setup(repo => repo.Get())
-                .Returns(snippets.AsQueryable);
-
-            // Act
-            await _snippetService.GetRecentAsync(10);
-
-
-            // Assert
-            _snippetRepository.Verify(repo => repo.Get(), Times.Once);
+            throw new NotImplementedException();
         }
 
         [Fact]
