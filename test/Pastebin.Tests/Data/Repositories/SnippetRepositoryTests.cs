@@ -20,8 +20,7 @@ namespace Pastebin.Tests.Data.Repositories
             _contextOptions = new DbContextOptionsBuilder<PastebinContext>().UseInMemoryDatabase("PastebinDB").Options;
         }
 
-        [Fact]
-        public async Task AddAsync_ShouldAddSnippet_WhenSnippetIsValid()
+        private async Task ResetDatabase()
         {
             // Arrange
             using (var context = new PastebinContext(_contextOptions))
@@ -29,6 +28,13 @@ namespace Pastebin.Tests.Data.Repositories
                 await context.Database.EnsureDeletedAsync();
                 await context.Database.EnsureCreatedAsync();
             }
+        }
+
+        [Fact]
+        public async Task AddAsync_ShouldAddSnippet_WhenSnippetIsValid()
+        {
+            // Arrange
+            await ResetDatabase();
 
             var testDateCreated = DateTime.UtcNow;
             var testSnippet = new Snippet
@@ -62,11 +68,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task FindAsync_ShouldReturnSnippet_WhenSnippetExists()
         {
             // Arrange
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            await ResetDatabase();
 
             var testDateCreated = DateTime.UtcNow;
             var testSnippet = new Snippet
@@ -102,11 +104,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task FindAsync_ShouldReturnNull_WhenSnippetDoesNotExist()
         {
             // Arrange
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            await ResetDatabase();
 
             var testId = Guid.NewGuid();
 
@@ -124,11 +122,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task GetRecentAsync_ShouldReturnAListOfSnippets()
         {
             // Arrange
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            await ResetDatabase();
 
             var testDateCreated = DateTime.UtcNow;
             var testSnippet = new Snippet
@@ -164,11 +158,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task GetRecentAsync_ShouldNotReturnPrivateSnippets()
         {
             // Arrange
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            await ResetDatabase();
 
             var testSnippet = new Snippet
             {
@@ -199,11 +189,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task GetRecentAsync_ShouldNotReturnExpiredSnippets()
         {
             // Arrange
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            await ResetDatabase();
 
             var testSnippet = new Snippet
             {
@@ -235,11 +221,7 @@ namespace Pastebin.Tests.Data.Repositories
         public async Task GetRecentAsync_ShouldReturnSnippetsDescendingByDateCreated()
         {
             // Arrange
-            using (var context = new PastebinContext(_contextOptions))
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            await ResetDatabase();
 
             var testSnippets = new List<Snippet>
             {
